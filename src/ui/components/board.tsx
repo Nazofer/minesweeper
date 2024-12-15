@@ -1,4 +1,3 @@
-// src/components/Board.tsx
 import React from 'react';
 import { motion } from 'framer-motion';
 import { CellData } from '@/core/typings/cell-data';
@@ -21,23 +20,25 @@ const Board: React.FC<BoardProps> = ({ board, onReveal, onFlag }) => {
         }}
       >
         {board.map((row, r) =>
-          row.map((cell, c) => (
-            <motion.div
-              key={`${r}-${c}`}
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.2 }}
-            >
-              <Cell
-                cell={cell}
-                onClick={() => onReveal(r, c)}
-                onRightClick={(e) => {
-                  e.preventDefault();
-                  onFlag(r, c);
-                }}
-              />
-            </motion.div>
-          ))
+          row.map((cell, c) => {
+            return (
+              <motion.div
+                key={`${r}-${c}`}
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.5 }}
+              >
+                <Cell
+                  cell={cell}
+                  onClick={() => onReveal(r, c)}
+                  onRightClick={(e) => {
+                    e.preventDefault();
+                    onFlag(r, c);
+                  }}
+                />
+              </motion.div>
+            );
+          })
         )}
       </div>
     </div>

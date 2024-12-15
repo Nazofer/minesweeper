@@ -1,4 +1,3 @@
-// src/components/StatusBar.tsx
 import React, { useEffect, useState } from 'react';
 import { Button } from './common/button';
 
