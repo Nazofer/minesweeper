@@ -21,4 +21,6 @@
 
 body {
   font-family: 'Led', sans-serif;
+  height: 100vh;
+  overflow: hidden;
 }

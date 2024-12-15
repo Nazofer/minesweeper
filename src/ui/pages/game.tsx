@@ -6,6 +6,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '../components/common/button';
 import { ChevronLeft } from 'lucide-react';
 import ConfettiExplosion from 'react-confetti-explosion';
+import AnimatedRoute from '@/ui/components/animatedRoute';
 
 const Game: React.FC = () => {
   const navigation = useNavigate();
@@ -36,7 +37,7 @@ const Game: React.FC = () => {
   };
 
   return (
-    <div className='min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4'>
+    <AnimatedRoute className='min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4'>
       <Button onClick={onGoBack} className='mb-4'>
         <ChevronLeft />
       </Button>
@@ -61,7 +62,7 @@ const Game: React.FC = () => {
         />
         {gameWon && <ConfettiExplosion />}
       </div>
-    </div>
+    </AnimatedRoute>
   );
 };
 

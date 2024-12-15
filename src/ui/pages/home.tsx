@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '../components/common/button';
 import { difficultyTypes } from '@/core/constants/difficultyTypes';
 import { DifficultyType } from '@/core/typings/difficulty';
+import AnimatedRoute from '../components/animatedRoute';
 
 const getDifficultyParams = (type: DifficultyType) => {
   const difficultyParams = difficultyTypes[type];
@@ -16,7 +17,7 @@ const getDifficultyParams = (type: DifficultyType) => {
 
 const Home: React.FC = () => {
   return (
-    <div className='min-h-screen flex items-center justify-center bg-gray-100 p-4'>
+    <AnimatedRoute className='min-h-screen flex items-center justify-center bg-gray-100 p-4'>
       <div className='max-w-[400px] w-full mb-4 flex flex-col items-center gap-4'>
         <h1>Select difficulty</h1>
         <Link className='w-full' to={`/game?${getDifficultyParams('easy')}`}>
@@ -29,7 +30,7 @@ const Home: React.FC = () => {
           <Button className='w-full'>Hard</Button>
         </Link>
       </div>
-    </div>
+    </AnimatedRoute>
   );
 };
 
