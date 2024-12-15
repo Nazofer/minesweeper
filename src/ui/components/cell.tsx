@@ -93,7 +93,30 @@ const Cell: React.FC<CellProps> = ({
           />
         )}
       </AnimatePresence>
-      <div className={twMerge(cell.isFlagged && 'z-[3]')}>{content}</div>
+      <AnimatePresence>
+        {content && (
+          <motion.div
+            initial={{
+              opacity: 0,
+              scale: 3,
+            }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+            }}
+            exit={{
+              opacity: 0,
+              scale: 3,
+            }}
+            transition={{
+              duration: 0.2,
+            }}
+            className={twMerge(cell.isFlagged && 'z-[3]')}
+          >
+            {content}
+          </motion.div>
+        )}
+      </AnimatePresence>
       {showExplosion && (
         <div className='z-20 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
           <Explosion size='200' delay={0} repeatDelay={0} repeat={0} />

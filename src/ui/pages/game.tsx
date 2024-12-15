@@ -5,6 +5,7 @@ import { useGameMechanics } from '@/ui/hooks/useGameMechanics';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '../components/common/button';
 import { ChevronLeft } from 'lucide-react';
+import ConfettiExplosion from 'react-confetti-explosion';
 
 const Game: React.FC = () => {
   const navigation = useNavigate();
@@ -46,15 +47,19 @@ const Game: React.FC = () => {
         gameWon={gameWon}
         onReset={reset}
       />
-      <div className='mt-4'>
+      <div className='mt-4 flex'>
+        {gameWon && <ConfettiExplosion />}
         <Board
           isGameOver={gameOver}
+          isGameWon={gameWon}
+          isGameStarted={isGameStarted}
           board={board}
           onReveal={handleReveal}
           onFlag={handleFlag}
           lastClickedCell={lastClickedCell}
           setLastClickedCell={setLastClickedCell}
         />
+        {gameWon && <ConfettiExplosion />}
       </div>
     </div>
   );
