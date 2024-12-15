@@ -15,11 +15,26 @@ export function placeMines(
   while (placed < mines) {
     const r = Math.floor(Math.random() * rows);
     const c = Math.floor(Math.random() * cols);
-    // Переконаємося, що не розміщуємо міну у безпечній клітинці
-    if ((r === safeRow && c === safeCol) || newBoard[r][c].isMine) continue;
+
+    // Перевіряємо, чи це безпечна зона — клітинка, де клікнув користувач, або її сусіди
+    if (isInSafeZone(r, c, safeRow, safeCol) || newBoard[r][c].isMine) {
+      continue;
+    }
+
     newBoard[r][c].isMine = true;
     placed++;
   }
 
   return newBoard;
+}
+
+function isInSafeZone(
+  r: number,
+  c: number,
+  safeRow: number,
+  safeCol: number
+): boolean {
+  // Зона в радіусі 1 клітинки: включає саму safeRow,safeCol та
+  // всі суміжні клітинки навколо неї (3x3 блок)
+  return Math.abs(r - safeRow) <= 1 && Math.abs(c - safeCol) <= 1;
 }
