@@ -2,9 +2,15 @@ import React from 'react';
 import { Button } from './common/button';
 import { twMerge } from 'tailwind-merge';
 import { CellData } from '@/core/typings/cell-data';
+// @ts-expect-error js module without types
+import Explosion from 'react-explode/Mindoro';
+import { motion, AnimatePresence } from 'framer-motion';
+import { TRANSITION_SPEED } from '@/core/constants/transitionSpeed';
 
 interface CellProps {
+  revealDelay?: number;
   cell: CellData;
+  showExplosion?: boolean;
   onClick: () => void;
   onRightClick: (e: React.MouseEvent) => void;
 }
@@ -21,9 +27,16 @@ const numberColors: Record<number, string> = {
   8: 'text-gray-700',
 };
 
-const Cell: React.FC<CellProps> = ({ cell, onClick, onRightClick }) => {
+const Cell: React.FC<CellProps> = ({
+  cell,
+  onClick,
+  onRightClick,
+  showExplosion,
+  revealDelay,
+}) => {
   let content = '';
-  let cellClasses = 'w-8 h-8 flex items-center justify-center font-bold';
+  let cellClasses =
+    'bg-gray-200 w-8 h-8 flex items-center justify-center font-bold';
 
   if (cell.isRevealed) {
     if (cell.isMine) {
@@ -50,10 +63,7 @@ const Cell: React.FC<CellProps> = ({ cell, onClick, onRightClick }) => {
       content = '🚩';
       cellClasses = twMerge(cellClasses, 'bg-gray-400 text-red-600');
     } else {
-      cellClasses = twMerge(
-        cellClasses,
-        'bg-gray-400 text-transparent cursor-pointer'
-      );
+      cellClasses = twMerge(cellClasses, 'text-transparent cursor-pointer');
     }
   }
 
@@ -62,13 +72,33 @@ const Cell: React.FC<CellProps> = ({ cell, onClick, onRightClick }) => {
       variant='default'
       className={twMerge(
         cellClasses,
-        'transition-colors duration-200 ease-in-out select-none disabled:opacity-1 hover:bg-gray-300'
+        'relative transition-colors duration-200 ease-in-out select-none disabled:opacity-1 hover:bg-gray-300'
       )}
       disabled={cell.isRevealed}
       onClick={onClick}
       onContextMenu={onRightClick}
     >
-      {content}
+      <AnimatePresence>
+        {!cell.isRevealed && (
+          <motion.div
+            exit={{
+              rotateY: 360,
+              opacity: 0,
+            }}
+            transition={{
+              delay: revealDelay,
+              duration: TRANSITION_SPEED,
+            }}
+            className='absolute z-[2] inset-0 bg-gray-400 rounded-lg hover:bg-gray-300'
+          />
+        )}
+      </AnimatePresence>
+      <div className={twMerge(cell.isFlagged && 'z-[3]')}>{content}</div>
+      {showExplosion && (
+        <div className='z-20 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
+          <Explosion size='200' delay={0} repeatDelay={0} repeat={0} />
+        </div>
+      )}
     </Button>
   );
 };

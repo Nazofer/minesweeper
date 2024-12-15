@@ -4,3 +4,5 @@ export type CellData = {
   isFlagged: boolean;
   adjacentMines: number;
 };
+
+export type Coordinate = [number, number];

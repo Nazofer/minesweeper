@@ -5,8 +5,8 @@ let mainWindow;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1200,
+    height: 800,
     webPreferences: {
       nodeIntegration: true,
     },
@@ -15,6 +15,7 @@ function createWindow() {
   const startURL = 'http://localhost:5173';
 
   mainWindow.loadURL(startURL);
+  mainWindow.webContents.openDevTools();
 
   mainWindow.on('closed', () => (mainWindow = null));
 }

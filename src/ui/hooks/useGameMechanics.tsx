@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { CellData } from '@/core/typings/cell-data';
+import { useCallback, useState } from 'react';
+import { CellData, Coordinate } from '@/core/typings/cell-data';
 
 import { revealCell } from '@/core/utils/reveal-cell';
 import { generateEmptyBoard } from '@/core/utils/generate-empty-board';
@@ -13,41 +13,49 @@ export function useGameMechanics(rows = 10, cols = 10, mines = 20) {
   const [gameOver, setGameOver] = useState(false);
   const [gameWon, setGameWon] = useState(false);
   const [isFirstMove, setIsFirstMove] = useState(true);
+  const [lastClickedCell, setLastClickedCell] = useState<Coordinate | null>(
+    null
+  );
 
-  const handleReveal = (r: number, c: number) => {
-    if (gameOver || gameWon) return;
+  const handleReveal = useCallback(
+    (r: number, c: number) => {
+      if (gameOver || gameWon) return;
 
-    let newBoard = board.map((row) => row.map((cell) => ({ ...cell })));
+      let newBoard = board.map((row) => row.map((cell) => ({ ...cell })));
 
-    // Якщо це перший клік, розміщуємо міни так, щоб (r,c) не була міною
-    if (isFirstMove) {
-      newBoard = placeMines(newBoard, mines, r, c);
-      newBoard = calculateAdjacents(newBoard);
-      setIsFirstMove(false);
-    }
+      // Якщо це перший клік, розміщуємо міни так, щоб (r,c) не була міною
+      if (isFirstMove) {
+        newBoard = placeMines(newBoard, mines, r, c);
+        newBoard = calculateAdjacents(newBoard);
+        setIsFirstMove(false);
+      }
 
-    newBoard = revealCell(newBoard, r, c);
-    setBoard(newBoard);
+      newBoard = revealCell(newBoard, r, c);
+      setBoard(newBoard);
 
-    // Перевірка на міну після розкриття
-    if (newBoard[r][c].isMine) {
-      setGameOver(true);
-      // Розкриємо усі міни для наочності
-      const revealedMines = newBoard.map((row) =>
-        row.map((cell) => (cell.isMine ? { ...cell, isRevealed: true } : cell))
-      );
-      setBoard(revealedMines);
-      return;
-    }
+      // Перевірка на міну після розкриття
+      if (newBoard[r][c].isMine) {
+        setGameOver(true);
+        // Розкриємо усі міни для наочності
+        const revealedMines = newBoard.map((row) =>
+          row.map((cell) =>
+            cell.isMine ? { ...cell, isRevealed: true } : cell
+          )
+        );
+        setBoard(revealedMines);
+        return;
+      }
 
-    // Перевірка на виграш
-    const allSafeRevealed =
-      newBoard.flat().filter((cell) => !cell.isMine && !cell.isRevealed)
-        .length === 0;
-    if (allSafeRevealed) {
-      setGameWon(true);
-    }
-  };
+      // Перевірка на виграш
+      const allSafeRevealed =
+        newBoard.flat().filter((cell) => !cell.isMine && !cell.isRevealed)
+          .length === 0;
+      if (allSafeRevealed) {
+        setGameWon(true);
+      }
+    },
+    [board, gameOver, gameWon, isFirstMove, mines]
+  );
 
   const handleFlag = (r: number, c: number) => {
     if (gameOver || gameWon) return;
@@ -63,11 +71,22 @@ export function useGameMechanics(rows = 10, cols = 10, mines = 20) {
   };
 
   const reset = () => {
+    setLastClickedCell(null);
     setBoard(generateEmptyBoard(rows, cols));
     setGameOver(false);
     setGameWon(false);
     setIsFirstMove(true);
   };
 
-  return { board, gameOver, gameWon, handleReveal, handleFlag, reset };
+  return {
+    board,
+    gameOver,
+    gameWon,
+    handleReveal,
+    handleFlag,
+    reset,
+    isGameStarted: !isFirstMove,
+    lastClickedCell,
+    setLastClickedCell,
+  };
 }
