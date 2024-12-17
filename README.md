@@ -1,50 +1,18 @@
-# React + TypeScript + Vite
+# Minesweeper
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Minesweeper – це класична гра-головоломка, де вам потрібно відкрити усі безмінні клітинки, уникаючи мін. Цей проєкт реалізований за допомогою сучасних технологій React та Electron для десктопного досвіду.
 
-Currently, two official plugins are available:
+## Стек технологій
+- React + TypeScript: для компонентного підходу та строгого типізованого коду.
+- Vite: для швидкого білду та комфортної розробки.
+- Tailwind CSS: для швидкого та гнучкого стилізування UI.
+- shadcn/ui: готові UI-компоненти, які легко кастомізуються.
+- Framer Motion: для плавних анімацій.
+- Electron: для упаковки веб-додатку у кросплатформний десктопний застосунок.
+- React Router (HashRouter): для внутрішньої навігації між екраном вибору складності та грою.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+## Основні можливості
+- Різні рівні складності: Обирайте складність (easy, medium, hard) на головному екрані.
+- Відкладене розташування мін: Міни генеруються після першого кліку, гарантуючи, що перший клік не натрапить на міну.
+- Таймер: в грі присутній таймер, що стартує одразу після першого кроку гравця.
+- Десктопний режим: Завдяки Electron, гру можна запускати як окремий застосунок на Windows, macOS та Linux.
